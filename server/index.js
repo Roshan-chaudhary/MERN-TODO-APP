@@ -22,7 +22,7 @@ mongoose.connect("mongodb+srv://roshanchy678910:8uf3Li4fC9QLijGf@cluster0.ojex6.
 .catch(err => console.log(err))
 
 
-app.use('/', TodoItemRoute);
+app.use('/', TodoItemRoute)
 
 
 
