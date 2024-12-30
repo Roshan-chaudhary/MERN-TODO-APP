@@ -1,5 +1,6 @@
-# Use an official Node.js runtime as a parent image
-FROM node:20
+# Use an official Node.js runtime as a parent image : Alpine Help Reduce image Size 
+FROM node:20-alpine   
+
 
 # Set the working directory
 WORKDIR /app
