@@ -3,7 +3,7 @@ name: SonarQube:Test
 on:
   push:
     branches:
-      - mainn
+      - main
 
 jobs:
   build:
@@ -18,10 +18,10 @@ jobs:
       - name: SonarQube Scan
         uses: sonarsource/sonarqube-scan-action@v4
         with:
-          args: -X -Dsonar.projectKey=Full-stack:Test
+          args: -X -Dsonar.projectKey=Full-stack:Test    # Project name is Required 
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-          SONAR_HOST_URL: "http://3.238.148.229:9000"
+          SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
 
       # If you wish to fail your job when the Quality Gate is red, uncomment the
       # following lines. This would typically be used to fail a deployment.
@@ -30,4 +30,4 @@ jobs:
       #   timeout-minutes: 5
       #   env:
       #     SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-      #     SONAR_HOST_URL: "http://3.238.148.229:9000"
+      #
