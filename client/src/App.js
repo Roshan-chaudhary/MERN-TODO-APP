@@ -56,7 +56,7 @@ function App() {
       setUpdateItemText('');
       setIsUpdating('');
     }catch(err){
-      console.log(err);
+      console.log(err)
     }
   }
   //before updating item we need to show input field where we will create our updated item
