@@ -15,7 +15,7 @@ router.post('/api/item', async (req, res)=>{
   }catch(err){
     res.json(err);
   }
-})
+});
 
 //create second route -- get data from database
 router.get('/api/items', async (req, res)=>{

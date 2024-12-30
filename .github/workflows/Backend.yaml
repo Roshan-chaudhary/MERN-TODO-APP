@@ -44,4 +44,4 @@ jobs:
 
     # Optionally run the container to ensure it works
     - name: Run Docker Container
-      run: docker run -d --rm --name Backend-web -p 8002:8002 761018870862.dkr.ecr.us-east-1.amazonaws.com/backend:06  # Updated region to us-east-1
+      run: docker run -d --rm --name Backend-web -p 5500:5500 761018870862.dkr.ecr.us-east-1.amazonaws.com/backend:06  # Updated region to us-east-1
