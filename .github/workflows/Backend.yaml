@@ -21,6 +21,42 @@ jobs:
         aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         aws-region: us-east-1  # Updated region to us-east-1
 
+
+
+
+        
+    # Run SonarQube Scan
+    - name: SonarQube Scan
+      uses: sonarsource/sonarqube-scan-action@v4
+      with:
+        args: -X -Dsonar.projectKey=Full-stack:Test    # Project name is Required 
+      env:
+        SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
+
+    # Wait for SonarQube Quality Gate status : Exit make to skip : exit 0
+    #- name: Check SonarQube Quality Gate status
+    #  run: |
+    #    QUALITY_GATE_STATUS=$(curl -s -X GET -u ${{ secrets.SONAR_TOKEN }} "https://sonarcloud.io/api/qualitygates/project_status?projectKey=Full-stack:Test" | jq -r '.projectStatus.status')
+    #   if [[ "$QUALITY_GATE_STATUS" != "OK" ]]; then
+    #     echo "Quality Gate failed. Code not allowed to be pushed to ECR."
+    #     exit 1    
+    #   fi
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     # Login to Amazon ECR
     - name: Login to Amazon ECR
       id: login-ecr
