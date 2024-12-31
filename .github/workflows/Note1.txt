@@ -1,4 +1,4 @@
-name: Deploy to Frontend
+name: Deploy to Backend
 
 on:
   push:
@@ -24,6 +24,7 @@ jobs:
 
 
 
+
     # Run SonarQube Scan
     - name: SonarQube Scan
       uses: sonarsource/sonarqube-scan-action@v4
@@ -33,15 +34,19 @@ jobs:
         SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
 
-
     # Wait for SonarQube Quality Gate status : Exit make to skip : exit 0
     - name: Check SonarQube Quality Gate status
       run: |
-        QUALITY_GATE_STATUS=$(curl -s -X GET -u ${{ secrets.SONAR_TOKEN }} "https://sonarcloud.io/api/qualitygates/project_status?projectKey=Full-stack:Test" | jq -r '.projectStatus.status')
-        if [[ "$QUALITY_GATE_STATUS" != "OK" ]]; then
+       QUALITY_GATE_STATUS=$(curl -s -X GET -u ${{ secrets.SONAR_TOKEN }} "https://sonarcloud.io/api/qualitygates/project_status?projectKey=Full-stack:Test" | jq -r '.projectStatus.status')
+       if [[ "$QUALITY_GATE_STATUS" != "OK" ]]; then
          echo "Quality Gate failed. Code not allowed to be pushed to ECR."
          exit 1    
-        fi
+       fi
+
+
+
+
+
 
 
 
@@ -52,32 +57,33 @@ jobs:
 
     # Build Docker image
     - name: Build Docker Image
-      run: docker build -t fronten:05 ./client
+      run: docker build -t backend:06 ./server
 
     # Tag Docker image for ECR
     - name: Tag Docker Image
-      run: docker tag fronten:05 761018870862.dkr.ecr.us-east-1.amazonaws.com/fronten:05  # Updated region to us-east-1
+      run: docker tag backend:06 761018870862.dkr.ecr.us-east-1.amazonaws.com/backend:06  # Updated region to us-east-1
 
-    
-
-     # Scan Docker image using Trivy
+   # Scan Docker image using Trivy
     - name: Scan Docker Image with Trivy
       uses: aquasecurity/trivy-action@master
       with:
-       image-ref: fronten:05  # Use the correct image reference
-       format: table
-       severity: CRITICAL,HIGH
-    
+      image-ref: infosys:latest
+      format: table
+      severity: CRITICAL,HIGH
+
+
+
+
 
 
     # Push Docker image to Amazon ECR
     - name: Push Docker Image to ECR
-      run: docker push 761018870862.dkr.ecr.us-east-1.amazonaws.com/fronten:05  # Updated region to us-east-1
+      run: docker push 761018870862.dkr.ecr.us-east-1.amazonaws.com/backend:06  # Updated region to us-east-1
 
     # Optionally pull the image to verify it is uploaded
     - name: Pull Docker Image from ECR
-      run: docker pull 761018870862.dkr.ecr.us-east-1.amazonaws.com/fronten:05  # Updated region to us-east-1
+      run: docker pull 761018870862.dkr.ecr.us-east-1.amazonaws.com/backend:06  # Updated region to us-east-1
 
     # Optionally run the container to ensure it works
     - name: Run Docker Container
-      run: docker run -d --rm --name Frontendd-web -p 3000:3000 761018870862.dkr.ecr.us-east-1.amazonaws.com/fronten:05  # Updated region to us-east-1
+      run: docker run -d --rm --name Backend-web -p 5500:5500 761018870862.dkr.ecr.us-east-1.amazonaws.com/backend:06  # Updated region to us-east-1
