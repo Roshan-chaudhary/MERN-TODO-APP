@@ -21,33 +21,23 @@ jobs:
         aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         aws-region: us-east-1  # Ensure the region matches your ECR location
 
+    # Run SonarQube Scan (Uncomment if you want SonarQube scan)
+    # - name: SonarQube Scan
+    #   uses: sonarsource/sonarqube-scan-action@v4
+    #   with:
+    #     args: -X -Dsonar.projectKey=Full-stack:Test  # Project name is required
+    #   env:
+    #     SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+    #     SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
 
-
-
-
-
-
-    # Run SonarQube Scan
-    #- name: SonarQube Scan
-    #  uses: sonarsource/sonarqube-scan-action@v4
-    #  with:
-    #    args: -X -Dsonar.projectKey=Full-stack:Test  # Project name is required
-    # env:
-    #    SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-    #    SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
-
-    # Wait for SonarQube Quality Gate status
-     #- name: Check SonarQube Quality Gate status
-    # run: |
-    #   QUALITY_GATE_STATUS=$(curl -s -X GET -u ${{ secrets.SONAR_TOKEN }} "https://sonarcloud.io/api/qualitygates/project_status?projectKey=Full-stack:Test" | jq -r '.projectStatus.status')
-    #    if [[ "$QUALITY_GATE_STATUS" != "OK" ]]; then
-    #     echo "Quality Gate failed. Code not allowed to be pushed to ECR."
-    #     exit 1
-    #    fi
-
-
-
-
+    # Wait for SonarQube Quality Gate status (Uncomment if you want to check the quality gate)
+    # - name: Check SonarQube Quality Gate status
+    #   run: |
+    #     QUALITY_GATE_STATUS=$(curl -s -X GET -u ${{ secrets.SONAR_TOKEN }} "https://sonarcloud.io/api/qualitygates/project_status?projectKey=Full-stack:Test" | jq -r '.projectStatus.status')
+    #     if [[ "$QUALITY_GATE_STATUS" != "OK" ]]; then
+    #       echo "Quality Gate failed. Code not allowed to be pushed to ECR."
+    #       exit 1
+    #     fi
 
     # Login to Amazon ECR
     - name: Login to Amazon ECR
@@ -62,12 +52,7 @@ jobs:
     - name: Tag Docker Image
       run: docker tag backend:06 761018870862.dkr.ecr.us-east-1.amazonaws.com/backend:06
 
-
-
-
-
-
-    # Scan Docker image using Trivy Action
+    # Scan Docker image using Trivy Action (You can adjust severity levels as needed)
     - name: Scan Docker Image with Trivy
       uses: aquasecurity/trivy-action@master
       with:
@@ -75,21 +60,6 @@ jobs:
         format: table
         severity: CRITICAL,HIGH,MEDIUM,LOW,UNKNOWN
         ignore-unfixed: false
-
-    # Install and Run Trivy CLI
-    - name: Install Trivy
-      run: |
-        curl -sfL https://raw.githubusercontent.com/aquasecurity/trivy/main/contrib/install.sh | sh
-        sudo mv trivy /usr/local/bin/
-
-    - name: Scan Docker Image with Trivy CLI
-      run: |
-        trivy image backend:06 --format table --severity CRITICAL,HIGH,MEDIUM,LOW,UNKNOWN --ignore-unfixed=false
-
-
-
-
-
 
     # Push Docker image to Amazon ECR
     - name: Push Docker Image to ECR
