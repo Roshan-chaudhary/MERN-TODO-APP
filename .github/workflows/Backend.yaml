@@ -21,6 +21,9 @@ jobs:
         aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         aws-region: us-east-1  # Ensure the region matches your ECR location
 
+
+
+
     # Run SonarQube Scan (Uncomment if you want SonarQube scan)
     # - name: SonarQube Scan
     #   uses: sonarsource/sonarqube-scan-action@v4
@@ -39,6 +42,8 @@ jobs:
     #       exit 1
     #     fi
 
+
+
     # Login to Amazon ECR
     - name: Login to Amazon ECR
       id: login-ecr
@@ -52,14 +57,21 @@ jobs:
     - name: Tag Docker Image
       run: docker tag backend:06 761018870862.dkr.ecr.us-east-1.amazonaws.com/backend:06
 
+
+
+
+
     # Scan Docker image using Trivy Action (You can adjust severity levels as needed)
     - name: Scan Docker Image with Trivy
       uses: aquasecurity/trivy-action@master
       with:
         image-ref: backend:06  # Use the correct image reference
-        format: table
+        format: json         # Use table , json , yaml etc
         severity: CRITICAL,HIGH,MEDIUM,LOW,UNKNOWN
         ignore-unfixed: false
+
+
+
 
     # Push Docker image to Amazon ECR
     - name: Push Docker Image to ECR
