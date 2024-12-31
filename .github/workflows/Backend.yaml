@@ -67,7 +67,7 @@ jobs:
       with:
         image-ref: backend:06             # Use the correct image reference
         format: table                     # Use table , json , yaml etc
-        severity: CRITICAL,HIGH,MEDIUM     # LOW,UNKNOWN
+        severity: CRITICAL,HIGH,MEDIUM,LOW,UNKNOWN   
         ignore-unfixed: false
 
 
