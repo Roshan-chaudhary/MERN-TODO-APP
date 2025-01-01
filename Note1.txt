@@ -26,4 +26,8 @@ docker pull grafana/grafana
 
 docker run -d -p 3001:3001 --name=grafana grafana/grafana
 
+user name : admin
+password  : admin
+
+Password : roshan@123AWS
 

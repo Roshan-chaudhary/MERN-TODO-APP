@@ -2,7 +2,7 @@ name: Deploy to Backend
 
 on:
   push:
-    branches: [ "main" ]
+    branches: [ "mainn" ]
 
 jobs:
   deploy:
@@ -44,6 +44,8 @@ jobs:
 
 
 
+
+
     # Login to Amazon ECR
     - name: Login to Amazon ECR
       id: login-ecr
@@ -59,8 +61,6 @@ jobs:
 
 
 
-
-
     # Scan Docker image using Trivy Action (You can adjust severity levels as needed)
     - name: Scan Docker Image with Trivy
       uses: aquasecurity/trivy-action@master
@@ -72,14 +72,15 @@ jobs:
 
 
 
-
     # Push Docker image to Amazon ECR
     - name: Push Docker Image to ECR
       run: docker push 761018870862.dkr.ecr.us-east-1.amazonaws.com/backend:06
 
+
     # Optionally pull the image to verify it is uploaded
     - name: Pull Docker Image from ECR
       run: docker pull 761018870862.dkr.ecr.us-east-1.amazonaws.com/backend:06
+
 
     # Optionally run the container to ensure it works
     - name: Run Docker Container
