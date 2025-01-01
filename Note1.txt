@@ -1,0 +1,29 @@
+1. Install Triviy in our Local Machine 
+
+sudo snap install trivy              // write in Termina Local 
+trivy fs --format table .            // In our Terminal
+
+
+// write in github actions code  of Triviy
+
+    # Scan Docker image using Trivy Action (You can adjust severity levels as needed)
+    - name: Scan Docker Image with Trivy
+      uses: aquasecurity/trivy-action@master
+      with:
+        image-ref: backend:06             # Use the correct image reference
+        format: table                     # Use table , json , yaml etc
+        severity: CRITICAL,HIGH,MEDIUM,LOW,UNKNOWN   
+        ignore-unfixed: false
+
+
+   
+
+
+
+ 2. Grafana install 
+
+docker pull grafana/grafana
+
+docker run -d -p 3001:3001 --name=grafana grafana/grafana
+
+
