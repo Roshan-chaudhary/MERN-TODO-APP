@@ -1,30 +1,35 @@
 const express = require('express');
 const mongoose = require('mongoose');
-const dotenv = require('dotenv').config();
+const AWS = require('aws-sdk');
 const cors = require('cors');
 
 const app = express();
-//use express.json() to get data into json format
 app.use(express.json());
-//Port 
+app.use(cors());
 const PORT = process.env.PORT || 5500;
 
-//use cors
-app.use(cors())
+// AWS SDK to fetch MongoDB URL
+const ssm = new AWS.SSM({ region: 'us-east-1' }); // Replace with your region
 
-//import routes
-const TodoItemRoute = require('./routes/todoItems');
+async function getMongoDBURL() {
+    const params = { Name: '/my-app/mongodb-url', WithDecryption: true }; // Replace with your parameter name
+    const result = await ssm.getParameter(params).promise();
+    return result.Parameter.Value;
+}
+
+(async () => {
+    try {
+        const MONGO_URI = await getMongoDBURL();
+        await mongoose.connect(MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true });
+        console.log("Database connected");
 
 
-//connect to mongodb ..
-mongoose.connect("mongodb+srv://roshanchy678910:8uf3Li4fC9QLijGf@cluster0.ojex6.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0")
-.then(()=> console.log("Database connected"))
-.catch(err => console.log(err))
+        
+        const TodoItemRoute = require('./routes/todoItems');
+        app.use('/', TodoItemRoute);
 
-
-app.use('/', TodoItemRoute)
-
-
-
-//connect to server
-app.listen(PORT, ()=> console.log("Server connected") );
+        app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+    } catch (error) {
+        console.error("Error:", error);
+    }
+})();

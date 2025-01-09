@@ -18,21 +18,7 @@ docker run -d --rm --name myapep -p 3000:3000 767397732220.dkr.ecr.ap-south-1.am
 docker run -d --rm --name myapip -p 8002:8002 767397732220.dkr.ecr.ap-south-1.amazonaws.com/backend:06
 
 
-
-// Atlash Connect free tire is finish  : Not work database is not connect 
-
-Atlash Mongodb : roshanchaudhary9997
-Password : zdOhGn1aarxKHxos
-connect URL with Mongodb Compass  : mongodb+srv://roshanchaudhary9997:zdOhGn1aarxKHxos@cluster0.s1cba.mongodb.net/
-COnnect Node.js URL :              mongodb+srv://roshanchaudhary9997:zdOhGn1aarxKHxos@cluster0.s1cba.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0
-
-Local URL  : mongodb://localhost:27017
-
-
-
-
-
-// Build image Manually 
+// Build image Manually in Local Machine 
 
 docker build -t backend-image:latest .
 docker run -d -p 8002:8002 -e NODE_ENV=production --name backend-container backend-image:latest
@@ -40,7 +26,6 @@ docker run -d -p 8002:8002 -e NODE_ENV=production --name backend-container backe
 
 docker build -t frontend-image:latest .
 docker run -d -p 3000:3000 --name frontend-container frontend-image:latest
-
 
 
 
@@ -55,8 +40,6 @@ docker system prune -a   // TO delete all stop Container and images
 
 
 
-
-pull data
 
 
 
