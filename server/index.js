@@ -11,6 +11,8 @@ const PORT = process.env.PORT || 5500;
 // AWS SDK to fetch MongoDB URL
 const ssm = new AWS.SSM({ region: 'us-east-1' }); // Replace with your region
 
+
+
 async function getMongoDBURL() {
     const params = { Name: '/my-app/mongodb-url', WithDecryption: true }; // Replace with your parameter name
     const result = await ssm.getParameter(params).promise();
@@ -24,7 +26,7 @@ async function getMongoDBURL() {
         console.log("Database connected");
 
 
-        
+
         const TodoItemRoute = require('./routes/todoItems');
         app.use('/', TodoItemRoute);
 
